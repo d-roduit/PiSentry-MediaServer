@@ -1,0 +1,25 @@
+{
+  "name": "pisentry-media-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon -r dotenv/config server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d-roduit/PiSentry-MediaServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/d-roduit/PiSentry-MediaServer/issues"
+  },
+  "homepage": "https://github.com/d-roduit/PiSentry-MediaServer",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "node-media-server": "^2.4.9",
+    "nodemon": "^2.0.20"
+  }
+}
