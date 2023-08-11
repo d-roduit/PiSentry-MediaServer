@@ -20,6 +20,6 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "node-media-server": "^2.4.9",
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.0.1"
   }
 }
