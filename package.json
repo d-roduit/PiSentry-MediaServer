@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/d-roduit/PiSentry-MediaServer",
   "dependencies": {
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "node-media-server": "^2.4.9",
     "nodemon": "^3.0.1"
   }
