@@ -20,7 +20,7 @@ const config = {
         app: 'pisentry',
         hls: true,
         // See http://underpop.online.fr/f/ffmpeg/help/options-51.htm.gz for hlsFlags details
-        hlsFlags: '[hls_time=2:hls_list_size=3:hls_flags=delete_segments:hls_allow_cache=0]',
+        hlsFlags: '[hls_time=2:hls_list_size=20:hls_flags=delete_segments:hls_allow_cache=0]',
       },
     ],
   },
