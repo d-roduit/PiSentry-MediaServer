@@ -28,3 +28,51 @@ const config = {
 
 const mediaServer = new NodeMediaServer(config);
 mediaServer.run();
+
+/*
+ * Handle the automatic shutdown of the stream when it has not been accessed for a specified delay
+ */
+const existingHlsStreams = {};
+const pisentryHlsStreamUrlRegex = new RegExp('^(?<streamPath>/pisentry/[0-9]{1,5})/index(?:[0-9]+\.ts|\.m3u8)$');
+const timeoutDelay = 5 * 60 * 1000; // = 5 minutes * 60 seconds/minute * 1000 milliseconds/second
+
+const setStreamShutdownTimeout = (streamPath, timeoutDelay) => {
+  if (existingHlsStreams.hasOwnProperty(streamPath)) {
+    const timeoutId = existingHlsStreams[streamPath];
+    clearTimeout(timeoutId);
+  }
+
+  existingHlsStreams[streamPath] = setTimeout(async () => {
+    try {
+      await fetch(`http://127.0.0.1:${config.http.port}/api/streams${streamPath}`,
+          { method: 'DELETE' }
+      )
+    } catch (err) {
+      console.log(`Exception caught while trying to delete stream ${streamPath}`);
+    }
+
+    delete existingHlsStreams[streamPath];
+  }, timeoutDelay);
+};
+
+const onRequestHandler = (req, res) => {
+  const matchResult = req.originalUrl.match(pisentryHlsStreamUrlRegex);
+
+  const streamPath = matchResult?.groups?.streamPath;
+
+  if (typeof streamPath !== 'string') {
+    return;
+  }
+
+  setStreamShutdownTimeout(streamPath, timeoutDelay);
+};
+
+mediaServer.nhs.httpServer.on('request', onRequestHandler);
+
+if (typeof mediaServer.nhs.httpsServer !== 'undefined') {
+  mediaServer.nhs.httpsServer.on('request', onRequestHandler);
+}
+
+mediaServer.on('postPublish', (id, streamPath, args) => {
+  setStreamShutdownTimeout(streamPath, timeoutDelay);
+});
