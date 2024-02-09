@@ -9,3 +9,7 @@ media/
 
 # dotenv environment variables file
 .env
+
+# HTTPS certificates
+https_certificates/*
+!https_certificates/.gitkeep

@@ -1,5 +1,7 @@
 import NodeMediaServer from 'node-media-server';
 
+const httpsEnabled = !!(process.env.HTTPS_PORT && process.env.HTTPS_KEY && process.env.HTTPS_CERT);
+
 const config = {
   rtmp: {
     port: process.env.RTMP_PORT,
@@ -25,6 +27,14 @@ const config = {
     ],
   },
 };
+
+if (httpsEnabled) {
+  config.https = {
+    port: process.env.HTTPS_PORT,
+    key: `./https_certificates/${process.env.HTTPS_KEY}`,
+    cert: `./https_certificates/${process.env.HTTPS_CERT}`,
+  }
+}
 
 const mediaServer = new NodeMediaServer(config);
 mediaServer.run();
